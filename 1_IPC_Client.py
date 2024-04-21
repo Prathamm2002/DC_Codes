@@ -1,28 +1,22 @@
 import socket
-import threading
 
-# Function to handle client connections
-def handle_client(client_socket):
-    # Receive data from the client
-    request = client_socket.recv(1024)
-    print(f"Received: {request.decode()}")
+# Set up client
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 8888))
 
-    # Echo back the received data
-    client_socket.send(request)
-    client_socket.close()
+# Send data to server
+message = b"Hello, server!"
+sent = client.send(message)
 
-# Set up the server
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('127.0.0.1', 8888))
-server.listen(5)  # Listen for connections with a backlog of 5
+# Check if message has been sent
+if sent == len(message):
+    print("Message sent successfully!")
+else:
+    print("Message not sent completely.")
 
-print("Server listening on port 8888")
+# Receive data from server
+response = client.recv(1024)
+print(response.decode())
 
-# Accept incoming connections
-while True:
-    client, addr = server.accept()
-    print(f"Accepted connection from {addr[0]}:{addr[1]}")
-
-    # Handle client connections in separate threads
-    client_handler = threading.Thread(target=handle_client, args=(client,))
-    client_handler.start()
+# Close client connection
+client.close()

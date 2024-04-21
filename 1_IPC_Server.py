@@ -1,15 +1,16 @@
 import socket
 
-# Set up the client
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('127.0.0.1', 8888))
+# Set up server
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(('127.0.0.1', 8888))
+server.listen(5)
 
-# Send data to the server
-client.send(b"Hello, abcdddddd!")
+print("Server listening on port 8888")
 
-# Receive data from the server
-response = client.recv(1024)
-print(f"Received from server: {response.decode()}")
-
-# Close the connection
-client.close()
+while True:
+    # Accept connection and handle data
+    client, _ = server.accept()
+    data = client.recv(1024)
+    print("Received:", data.decode())
+    client.send(data)
+    client.close()
