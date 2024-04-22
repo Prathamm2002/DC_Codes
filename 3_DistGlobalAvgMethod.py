@@ -1,11 +1,14 @@
-import random
 import threading
 
-# Number of nodes in the network
-NUM_NODES = 5
+# Take number of nodes as user input
+NUM_NODES = int(input("Enter the number of nodes: "))
 
 # Initialize local values for each node
-local_values = [random.randint(1, 100) for _ in range(NUM_NODES)]
+local_values = []
+for i in range(NUM_NODES):
+    value = int(input(f"Enter local value for node {i + 1}: "))
+    local_values.append(value)
+
 global_average = 0
 
 # Lock for synchronization
