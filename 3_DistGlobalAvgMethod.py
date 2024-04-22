@@ -18,7 +18,7 @@ lock = threading.Lock()
 def compute_local_average():
     with lock:
         local_average = sum(local_values) / len(local_values)
-        print(f"Local average: {local_average}")
+        print(f"Local average: {local_average}\n")
         return local_average
 
 # Function to update global average using local averages
@@ -29,7 +29,7 @@ def update_global_average():
         local_average = compute_local_average()
         with lock:
             global_average = (global_average + local_average) / 2
-        print(f"Updated global average: {global_average}")
+        print(f"Updated global average: {global_average}\n")
         if abs(global_average - local_average) < threshold:
             break
 
