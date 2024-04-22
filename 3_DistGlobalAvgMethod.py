@@ -1,3 +1,5 @@
+# Distributed Global Averaging
+
 import threading
 
 # Take number of nodes as user input

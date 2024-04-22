@@ -1,3 +1,5 @@
+# Code to synchronize time
+
 import time
 import random
 

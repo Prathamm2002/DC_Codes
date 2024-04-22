@@ -4,13 +4,13 @@ detector = int(input('Enter node that detected failure first : '))
 
 
 def find_coordinator(detector, faulty, n):
-    for node in range(detector, n+1):
+    for node in range(detector + 1, n + 1):  # Start from the next node after the detector
         if node == faulty:
             continue
         print()
         print(f'---- Node {node} sending ELECTION message ----')
         oks = 0
-        for neighbor in range(node+1, n+1):
+        for neighbor in range(node + 1, n + 1):
             if neighbor != faulty:
                 oks += 1
             print(f'ELECTION message sent to Node {neighbor}')
@@ -20,6 +20,7 @@ def find_coordinator(detector, faulty, n):
         else:
             print('Active higher priority process does NOT exist..')
             return node
+
 
 
 def bully(detector, faulty, n):
