@@ -1,23 +1,16 @@
-n = 5
-r = 3
-alloc = [[0, 1, 0], [2, 0, 0], [3, 0, 2], [2, 1, 1], [0, 0, 2]]
-mx = [[7, 5, 3], [3, 2, 2], [9, 0, 2], [2, 2, 2], [4, 3, 3]]
-need = [[7, 4, 3], [1, 2, 2], [6, 0, 0], [0, 1, 1], [4, 3, 1]]
-avail = [3, 3, 2]
-
-safe = []
-
-
 def display(mx, alloc, need, avail):
-    print('Available Resources : ', avail)
-    print('Allocated Matrix :- ')
-    print(alloc)
+    print('Available Resources: ', avail)
+    print('Allocated Matrix:')
+    for row in alloc:
+        print(*row)
     print()
-    print('Max Matrix :- ')
-    print(mx)
+    print('Max Matrix:')
+    for row in mx:
+        print(*row)
     print()
-    print('Need Matrix :- ')
-    print(need)
+    print('Need Matrix:')
+    for row in need:
+        print(*row)
     print()
 
 
@@ -25,53 +18,53 @@ def bankers(n, r, mx, alloc, need, avail):
     print('***** Initially *****')
     display(mx, alloc, need, avail)
 
+    safe_sequence = []
+
     while True:
-        mark = True
+        found = False
 
         for i in range(n):
-            if i+1 in safe:
+            if i + 1 in safe_sequence:
                 continue
 
-            mark = True
+            can_allocate = True
             for j in range(r):
                 if need[i][j] > avail[j]:
-                    mark = False
+                    can_allocate = False
                     break
 
-            if mark:
-                safe.append(i+1)
+            if can_allocate:
+                safe_sequence.append(i + 1)
                 for j in range(r):
-                    avail[j] += alloc[i][j] # once process done, increase jth resource availability
+                    avail[j] += alloc[i][j]
                     alloc[i][j] = 0
-                    need[i][j] = '-' # ecause process is done
+                    need[i][j] = '-'  # Mark as done
 
-                print(f'***** After allocating resources to P{i+1} *****')
+                print(f'***** After allocating resources to P{i + 1} *****')
                 print(f'P{i + 1} can be allocated resources for execution..')
                 display(mx, alloc, need, avail)
                 print()
+                found = True
                 break
 
-        if not mark:
-            print("System is NOT in safe state !!")
+        if not found:
+            print("System is NOT in a safe state !!")
             break
-        if len(safe) == n:
-            print("System is in safe state !!")
-            print("Safe Sequence is : ", end=" ")
-            for i in safe:
+
+        if len(safe_sequence) == n:
+            print("System is in a safe state !!")
+            print("Safe Sequence is:", end=" ")
+            for i in safe_sequence:
                 print(f"P{i}", end=" ")
             print()
             break
 
 
+n = 5
+r = 3
+alloc = [[0, 1, 0], [2, 0, 0], [3, 0, 2], [2, 1, 1], [0, 0, 2]]
+mx = [[7, 5, 3], [3, 2, 2], [9, 0, 2], [2, 2, 2], [4, 3, 3]]
+need = [[7, 4, 3], [1, 2, 2], [6, 0, 0], [0, 1, 1], [4, 3, 1]]
+avail = [3, 3, 2]
+
 bankers(n, r, mx, alloc, need, avail)
-'''
-At the beginning of the algorithm, the available resources are [3, 3, 2]. The allocated matrix shows how many resources each process is currently holding. The max matrix shows the maximum number of resources each process will need to complete its execution, and the need matrix shows the difference between the maximum resources needed and the currently allocated resources.
-
-The algorithm then attempts to allocate resources to each process in turn. First, P2 is able to allocate its needed resources and execute, leaving the available resources at [5, 3, 2]. The allocated matrix is updated to reflect the new state.
-
-Next, P4 is able to allocate its needed resources and execute, leaving the available resources at [7, 4, 3]. Again, the allocated matrix is updated.
-
-The process continues with P1 and P3 being allocated resources and executing, until finally, P5 is able to allocate its needed resources and execute. At this point, all processes have executed and the system is in a safe state without any risk of a deadlock occurring.
-
-The safe sequence is the order in which the processes executed without causing a deadlock, which is P2 P4 P1 P3 P5 in this case
-'''
